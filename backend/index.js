@@ -8,10 +8,29 @@ const cors = require('cors');
 // connecting to the database
 connectDb();
 
+const allowedOrigins = ["https://quiz-web-application-xyz.vercel.app"]; 
+app.use(
+    cors({
+        origin: function (origin, callback) {
+            if (
+                !origin || 
+                allowedOrigins.includes(origin)  
+            ) {
+                callback(null, true); 
+            } else {
+                callback(new Error("Not allowed by CORS")); 
+            }
+        },
+        credentials: true, 
+        optionsSuccessStatus: 200 
+    })
+);
+
 // for parsing the data
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-app.use(cors());
+
+
 
 app.use('/api', userRoutes);
 // routes
